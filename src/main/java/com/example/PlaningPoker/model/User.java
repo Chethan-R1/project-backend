@@ -21,6 +21,8 @@ public class User {
     private String name;
     private String email;
 
+    private boolean isModerator = false;
+
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime modifiedAt = LocalDateTime.now();
 }

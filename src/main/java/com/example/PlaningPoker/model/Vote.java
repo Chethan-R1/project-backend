@@ -25,9 +25,9 @@ public class Vote {
     private Question question;
 
     @DBRef
-    private Story story;
+    private String storyId;
 
-    private Integer voteValue;
+    private String voteValue;
 
     private LocalDateTime votedAt = LocalDateTime.now();
 }

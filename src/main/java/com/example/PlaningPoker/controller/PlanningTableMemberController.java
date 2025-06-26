@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/members")
@@ -57,4 +58,16 @@ public class PlanningTableMemberController {
     public List<PlanningTableMember> getAll() {
         return memberRepo.findAll();
     }
+
+    @DeleteMapping("/{tableId}/{userId}")
+    public ResponseEntity<?> removeUserFromTable(@PathVariable String tableId, @PathVariable String userId) {
+        Optional<PlanningTableMember> memberOpt = memberRepo.findByPlanTableIdAndUserId(tableId, userId);
+        if (memberOpt.isPresent()) {
+            memberRepo.delete(memberOpt.get());
+            return ResponseEntity.ok("User removed from table");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

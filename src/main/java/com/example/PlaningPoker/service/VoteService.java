@@ -1,5 +1,6 @@
 package com.example.PlaningPoker.service;
 
+import com.example.PlaningPoker.dto.VoteRequest;
 import com.example.PlaningPoker.model.Vote;
 import com.example.PlaningPoker.repository.VoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,29 @@ public class VoteService {
 
     public void delete(String id) {
         repository.deleteById(id);
+    }
+
+
+
+    public Vote castVote(VoteRequest request) {
+        // Remove existing vote by same user for same story
+        repository.deleteByUserAndStoryId(request.getUser(), request.getStoryId());
+
+        Vote vote = new Vote();
+        vote.setUser(request.getUser());
+        vote.setStoryId(request.getStoryId());
+        vote.setVoteValue(request.getVoteValue());
+        vote.setVotedAt(LocalDateTime.now());
+
+        return repository.save(vote);
+    }
+
+    public List<Vote> getVotesForStory(String storyId) {
+        return repository.findByStoryId(storyId);
+    }
+
+    public void resetVotesForStory(String storyId) {
+        repository.deleteByStoryId(storyId);
     }
 }
 

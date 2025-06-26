@@ -19,11 +19,17 @@ public class UserService {
     public User create(User user) {
         return userRepository.findByName(user.getName())
                 .orElseGet(() -> {
+                    // Check if this is the first user
+                    boolean isFirstUser = userRepository.count() == 0;
+                    user.setModerator(isFirstUser);
+
                     user.setCreatedAt(LocalDateTime.now());
                     user.setModifiedAt(LocalDateTime.now());
+
                     return userRepository.save(user);
                 });
     }
+
 
     public List<User> getAll() {
         return userRepository.findAll();
